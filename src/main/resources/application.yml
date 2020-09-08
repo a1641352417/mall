@@ -1,0 +1,20 @@
+server:
+  port: 8686
+
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource            #当前数据源操作类型
+    driver-class-name: com.mysql.cj.jdbc.Driver           # mysql驱动
+    url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC
+    username: root
+    password: 1234
+
+    #json序列化配置
+    jackson:
+      date-format: yyyy-MM-dd HH:mm:ss
+      time-zone: GMT+8
+    jmx:
+      enabled: false
+mybatis:
+  mapperLocations: classpath:mapper/*.xml
+  type-aliases-package: top.sxh427.mall.entities    # 所有Entity类所在包

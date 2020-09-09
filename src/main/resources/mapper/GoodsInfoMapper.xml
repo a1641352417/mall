@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.sxh427.mall.dao.GoodsInfoDao">
+    <!--
+    private Integer killId; //秒杀id，自增
+    private String goodsName; //商品名称
+    private Integer goodsNums; //商品库存数量
+    private Double price; //商品价格
+    private String image; //商品图片
+    @JsonFormat(pattern = "YYYY-MM-DD HH:MM:SS", timezone = "GMT+8")
+    private Date startTime; //活动开始时间
+    @JsonFormat(pattern = "YYYY-MM-DD HH:MM:SS", timezone = "GMT+8")
+    private Date endTime; //活动结束时间
+    private Integer status; //0代表无效，1代表有效
+    -->
+    <resultMap id="GoodsInfoMap" type="top.sxh427.mall.entities.GoodsInfo">
+        <id column="kill_id" property="killId" jdbcType="INTEGER"/>
+        <result column="goods_name" property="goodsName" jdbcType="VARCHAR"/>
+        <result column="goods_nums" property="goodsNums" jdbcType="INTEGER"/>
+        <result column="price" property="price" jdbcType="DECIMAL"/>
+        <result column="image" property="image" jdbcType="VARCHAR"/>
+        <result column="start_time" property="startTime" jdbcType="DATETIME"/>
+        <result column="end_time" property="endTime" jdbcType="DATETIME"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!-- 插入一条订单信息 -->
+    <insert id="insertOne" parameterType="top.sxh427.mall.entities.GoodsInfo">
+        insert into goods_info(goods_name, goods_nums, price, image, start_time, end_time, status) values
+        (#{goodsName}, #{goodsNums}, #{price}, #{image}, #{startTime}, #{endTime}, 1);
+    </insert>
+
+    <!-- 返回某个时间段的所有商品信息 -->
+    <select id="selectByTime" resultMap="GoodsInfoMap">
+        SELECT kill_id, goods_name, goods_nums, price, image
+        FROM goods_info
+        WHERE start_time = #{startTime} AND end_time = #{endTime} AND STATUS = 1;
+    </select>
+
+    <!--扣减商品库存 -->
+    <update id="updateGoodsNumsById" parameterType="java.lang.Integer">
+        UPDATE goods_info SET goods_nums = goods_nums - 1 WHERE kill_id = #{killId};
+    </update>
+</mapper>

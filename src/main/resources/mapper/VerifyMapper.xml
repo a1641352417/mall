@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.sxh427.mall.dao.VerifyDao">
+
+    <resultMap id="ManagerMap" type="top.sxh427.mall.entities.Verify">
+        <id column="manager_id" property="id" jdbcType="INTEGER"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!-- 查询管理员账号是否存在 -->
+    <select id="selectManagerByPhone" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(manager_id) from manager where phone = #{phone} and status = 1;
+    </select>
+
+    <resultMap id="UserMap" type="top.sxh427.mall.entities.Verify">
+        <id column="user_id" property="id" jdbcType="INTEGER"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+    </resultMap>
+    <!-- 查询用户账号是否存在 -->
+    <select id="selectUserByPhone" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(user_id) from user where phone = #{phone} and status = 1;
+    </select>
+</mapper>

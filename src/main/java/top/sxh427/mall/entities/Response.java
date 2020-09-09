@@ -4,12 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BlackList implements Serializable {
-    private Integer id;
-    private String phone;
+public class Response {
+    private Integer status;
+    private String message;
+    private OrderInfo orderInfo;
 }

@@ -4,7 +4,6 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import top.sxh427.mall.entities.GoodsInfo;
 
-import java.util.Date;
 import java.util.List;
 
 @Mapper
@@ -14,7 +13,7 @@ public interface GoodsInfoDao {
      * @param goodsInfo 商品信息
      * @return
      */
-    int insertOne(@Param("goodsInfo") GoodsInfo goodsInfo);
+    int insertOne(GoodsInfo goodsInfo);
 
     /**
      * 返回某个时间段的所有商品信息
@@ -22,7 +21,7 @@ public interface GoodsInfoDao {
      * @param endTime 结束时间
      * @return
      */
-    List<GoodsInfo> selectByTime(@Param("startTime") Date startTime, @Param("endTime") Date endTime);
+    List<GoodsInfo> selectByTime(@Param("startTime") String startTime, @Param("endTime") String endTime);
 
     /**
      * 查询商品库存

@@ -4,11 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderInfo {
+public class OrderInfo implements Serializable {
     private Integer orderId; //订单id，自增
     private Integer killId; //秒杀id
     private String phone; //手机号

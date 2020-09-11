@@ -2,7 +2,6 @@ package top.sxh427.mall.service;
 
 import top.sxh427.mall.entities.GoodsInfo;
 
-import java.util.Date;
 import java.util.List;
 
 public interface GoodsInfoService {
@@ -19,7 +18,7 @@ public interface GoodsInfoService {
      * @param endTime 结束时间
      * @return
      */
-    List<GoodsInfo> selectByTime(Date startTime, Date endTime);
+    List<GoodsInfo> selectByTime(String startTime, String endTime);
 
     /**
      * 更新商品库存

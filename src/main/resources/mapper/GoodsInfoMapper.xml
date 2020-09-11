@@ -19,8 +19,8 @@
         <result column="goods_nums" property="goodsNums" jdbcType="INTEGER"/>
         <result column="price" property="price" jdbcType="DECIMAL"/>
         <result column="image" property="image" jdbcType="VARCHAR"/>
-        <result column="start_time" property="startTime" jdbcType="DATETIME"/>
-        <result column="end_time" property="endTime" jdbcType="DATETIME"/>
+        <result column="start_time" property="startTime" jdbcType="TIMESTAMP"/>
+        <result column="end_time" property="endTime" jdbcType="TIMESTAMP"/>
         <result column="status" property="status" jdbcType="INTEGER"/>
     </resultMap>
 

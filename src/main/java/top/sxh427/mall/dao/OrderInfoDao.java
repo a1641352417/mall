@@ -14,7 +14,7 @@ public interface OrderInfoDao {
      * @param orderInfo 订单信息
      * @return
      */
-    int insertOne(@Param("orderInfo") OrderInfo orderInfo);
+    int insertOne(OrderInfo orderInfo);
 
     /**
      * 查询某条订单

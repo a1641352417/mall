@@ -6,7 +6,6 @@ import top.sxh427.mall.entities.GoodsInfo;
 import top.sxh427.mall.service.GoodsInfoService;
 
 import javax.annotation.Resource;
-import java.util.Date;
 import java.util.List;
 
 @Service("GoodsInfoService")
@@ -21,7 +20,7 @@ public class GoodsInfoServiceImpl implements GoodsInfoService {
     }
 
     @Override
-    public List<GoodsInfo> selectByTime(Date startTime, Date endTime) {
+    public List<GoodsInfo> selectByTime(String startTime, String endTime) {
         return goodsInfoDao.selectByTime(startTime, endTime);
     }
 

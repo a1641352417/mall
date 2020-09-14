@@ -32,9 +32,9 @@
 
     <!-- 返回某个时间段的所有商品信息 -->
     <select id="selectByTime" resultMap="GoodsInfoMap">
-        SELECT kill_id, goods_name, goods_nums, price, image
+        SELECT kill_id, goods_name, goods_nums, price, image, start_time, end_time
         FROM goods_info
-        WHERE start_time = #{startTime} AND end_time = #{endTime} AND STATUS = 1;
+        WHERE start_time &gt;= #{startTime} AND end_time &lt;= #{endTime} AND STATUS = 1;
     </select>
 
     <!--扣减商品库存 -->

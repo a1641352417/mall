@@ -2,18 +2,23 @@ package top.sxh427.mall;
 
 import com.google.gson.Gson;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import top.sxh427.mall.entities.GoodsInfo;
 import top.sxh427.mall.entities.OrderInfo;
 import top.sxh427.mall.service.GoodsInfoService;
 import top.sxh427.mall.service.OrderInfoService;
 import top.sxh427.mall.service.VerifyService;
+import top.sxh427.mall.utils.RedisUtil;
 
 import javax.annotation.Resource;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @SpringBootTest
 class MallApplicationTests {
@@ -27,7 +32,58 @@ class MallApplicationTests {
     @Resource
     private VerifyService verifyService;
 
-    @Test
+    @Autowired
+    RedisTemplate<String, String> redisTemplate;
+
+    @Resource
+    RedisUtil redisUtil;
+
+
+
+
+    void test() {
+        List<GoodsInfo> goodsInfos = goodsInfoService.selectByTime("2020-09-10 13:55:00", "2020-09-10 14:15:00");
+        goodsInfos.forEach(System.out::println);
+        if (goodsInfos.size() != 0) {
+            for (int i = 0; i < goodsInfos.size(); i++) {
+                redisUtil.set(goodsInfos.get(i).getKillId().toString(),
+                        goodsInfos.get(i).getGoodsNums().toString(),
+                        20, TimeUnit.MINUTES);
+            }
+        }
+    }
+
+    void time() throws InterruptedException {
+        String startTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        startTime = startTime.substring(0, 13) + ":55:00";
+        String endTime = startTime.substring(0, 12) + (char)(startTime.charAt(12) + 1) + ":15:00";
+        System.out.println(startTime);
+        System.out.println(endTime);
+        redisUtil.set("123", "50", 5, TimeUnit.SECONDS);
+        Thread.sleep(6000);
+        Long decrement = redisTemplate.opsForValue().decrement("123");
+        System.out.println(redisTemplate.opsForValue().get("123") + ",decrement:" + decrement);
+    }
+
+    void redisTest() throws InterruptedException {
+        redisUtil.set("123", "50", 5, TimeUnit.SECONDS);
+        Thread.sleep(6000);
+        System.out.println("getFail1:" + redisTemplate.opsForValue().get("123"));
+        System.out.println("delete fail:" + redisUtil.delete("123"));
+        redisUtil.set("123", "50", 5, TimeUnit.SECONDS);
+        System.out.println("getFail2:" + redisTemplate.opsForValue().get("123"));
+        System.out.println("delete fail:" + redisUtil.delete("123"));
+        boolean set = redisUtil.set("5", "50", 5, TimeUnit.MINUTES);
+        System.out.println(redisTemplate.opsForValue().get("5") + ",set:" + set);
+        Long decrement = redisTemplate.opsForValue().decrement("5");
+        System.out.println(redisTemplate.opsForValue().get("5") + ",decrement:" + decrement);
+        Long increment = redisTemplate.opsForValue().increment("5");
+        System.out.println(redisTemplate.opsForValue().get("5") + ",increment:" + increment);
+        System.out.println("getFail:" + redisTemplate.opsForValue().get("4"));
+        System.out.println("delete success:" + redisUtil.delete("5"));
+        System.out.println("delete fail:" + redisUtil.delete("5"));
+    }
+
     void contextLoads() throws ParseException {
         int i = goodsInfoService.insertOne(new GoodsInfo(0, "亨得利眼镜", 20, 1.00, "localhost:2323/a.jpg",
                 "2020-09-10 10:00:00",
@@ -39,7 +95,7 @@ class MallApplicationTests {
         goodsInfos.forEach(System.out :: println);
     }
 
-    @Test
+
     void order() {
         int k = orderInfoService.insertOne(new OrderInfo(0, 7, "11111111111", "待支付", 1));
         int o = orderInfoService.insertOne(new OrderInfo(0, 7, "11111111112", "待支付", 1));
@@ -54,7 +110,7 @@ class MallApplicationTests {
         System.out.println("orderInfoService.updateStatusById:" + w);
     }
 
-    @Test
+
     void verify() {
         int r = verifyService.selectManagerByPhone("18854642134");
         int k = verifyService.selectManagerByPhone("188546134");
@@ -65,7 +121,7 @@ class MallApplicationTests {
         System.out.println("verifyService.selectUserByPhone:" + t + "," + q);
     }
 
-    @Test
+
     void api(){
         GoodsInfo goodsInfo = new GoodsInfo(null, "iPhone 11", 2, 1.00, "E:/image/iPhone 11.jpg", "2020-09-10 14:00:00", "2020-09-10 14:10:00", null);
         Gson gson = new Gson();

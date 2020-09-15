@@ -8,11 +8,13 @@ import top.sxh427.mall.service.GoodsInfoService;
 import javax.annotation.Resource;
 import java.util.List;
 
+
 @Service("GoodsInfoService")
 public class GoodsInfoServiceImpl implements GoodsInfoService {
 
     @Resource
     private GoodsInfoDao goodsInfoDao;
+
 
     @Override
     public int insertOne(GoodsInfo goodsInfo) {

@@ -2,7 +2,6 @@ package top.sxh427.mall.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import top.sxh427.mall.entities.GoodsInfo;
@@ -48,9 +47,5 @@ public class TaskServiceImpl implements TaskService {
                         20, TimeUnit.MINUTES);
             }
         }
-
     }
-
-
-
 }

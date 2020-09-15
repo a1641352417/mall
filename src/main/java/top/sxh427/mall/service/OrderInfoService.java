@@ -1,5 +1,6 @@
 package top.sxh427.mall.service;
 
+import org.apache.ibatis.annotations.Param;
 import top.sxh427.mall.entities.OrderInfo;
 
 import java.util.List;
@@ -14,10 +15,11 @@ public interface OrderInfoService {
 
     /**
      * 查询某条订单
-     * @param orderId 订单id
+     * @param killId 秒杀id
+     * @param phone 手机号
      * @return
      */
-    OrderInfo selectById(Integer orderId);
+    OrderInfo selectById(Integer killId, String phone);
 
     /**
      * 查询所有订单信息
@@ -27,14 +29,16 @@ public interface OrderInfoService {
 
     /**
      * 修改支付状态为1
-     * @param orderId 订单id
+     * @param killId 秒杀id
+     * @param phone 手机号
      * @return
      */
-    int updatePayStatusById(Integer orderId);
+    int updatePayStatusById(Integer killId, String phone);
     /**
      * 取消支付后修改订单状态为0
-     * @param orderId
+     * @param killId 秒杀id
+     * @param phone 手机号
      * @return
      */
-    int updateStatusById(Integer orderId);
+    int updateStatusById(Integer killId, String phone);
 }

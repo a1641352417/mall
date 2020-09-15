@@ -11,7 +11,6 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderInfo implements Serializable {
-    private Integer orderId; //订单id，自增
     private Integer killId; //秒杀id
     private String phone; //手机号
     private String payStatus; //待支付或已支付

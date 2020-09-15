@@ -1,8 +1,11 @@
 package top.sxh427.mall.controller;
 
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.web.bind.annotation.*;
+import top.sxh427.mall.entities.OrderInfo;
 import top.sxh427.mall.entities.Response;
 import top.sxh427.mall.service.OrderInfoService;
+import top.sxh427.mall.utils.RedisUtil;
 
 import javax.annotation.Resource;
 
@@ -14,18 +17,34 @@ public class PayController {
     @Resource
     private OrderInfoService orderInfoService;
 
-    @GetMapping("/ok/{orderId}")
-    public Response confirmPay(@PathVariable("orderId") Integer orderId){
-        int res = orderInfoService.updatePayStatusById(orderId);
-        return res > 0 ? new Response(200, "支付成功", null)
-                       : new Response(444, "支付失败", null);
+    @Resource
+    private RedisUtil redisUtil;
+
+    @Resource
+    private AmqpTemplate amqpTemplate;
+
+    @GetMapping("/ok/{killId}/{phone}")
+    public Response confirmPay(@PathVariable("killId") Integer killId, @PathVariable("phone") String phone){
+        if (redisUtil.delete(killId + phone)) { //删除成功代表第一次请求
+            amqpTemplate.convertAndSend("orderQueue2", new OrderInfo(killId, phone, null, null));
+            int res = orderInfoService.updatePayStatusById(killId, phone);
+            return new Response(200, "请求发送成功，请等待！", null);
+
+        } else {
+            return  new Response(444, "请不要多次点击！", null);
+        }
     }
 
-    @GetMapping("/cancel/{orderId}")
-    public Response cancelPay(@PathVariable("orderId") Integer orderId){
-        int res = orderInfoService.updateStatusById(orderId);
-        return res > 0 ? new Response(200, "取消成功", null)
-                : new Response(444, "取消失败", null);
+    @GetMapping("/cancel/{killId}/{phone}")
+    public Response cancelPay(@PathVariable("killId") Integer killId, @PathVariable("phone") String phone){
+        if (redisUtil.delete(killId + phone)) { //删除成功代表第一次请求
+            amqpTemplate.convertAndSend("orderQueue3", new OrderInfo(killId, phone, null, null));
+            int res = orderInfoService.updateStatusById(killId, phone);
+            return new Response(200, "请求发送成功，请等待！", null);
+
+        } else {
+            return  new Response(444, "请不要多次点击！", null);
+        }
     }
 
 }

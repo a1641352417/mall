@@ -2,6 +2,9 @@ package top.sxh427.mall.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import top.sxh427.mall.entities.GoodsInfo;
 import top.sxh427.mall.entities.Response;
@@ -10,6 +13,8 @@ import top.sxh427.mall.service.GoodsInfoService;
 import javax.annotation.Resource;
 import java.util.List;
 
+
+@Slf4j
 @CrossOrigin
 @RestController
 @RequestMapping("kill")
@@ -27,6 +32,7 @@ public class GoodsInfoController {
     public Response addGoodsInfo(String goodsInfo) {
         Gson gson = new Gson();
         System.out.println(goodsInfo);
+        log.info("add:" + goodsInfo);
         GoodsInfo goodsInfos = gson.fromJson(goodsInfo,new TypeToken<GoodsInfo>() {}.getType());
         int res = goodsInfoService.insertOne(goodsInfos);
 

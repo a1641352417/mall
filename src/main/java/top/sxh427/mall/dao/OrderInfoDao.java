@@ -18,10 +18,11 @@ public interface OrderInfoDao {
 
     /**
      * 查询某条订单
-     * @param orderId 订单id
+     * @param killId 秒杀id
+     * @param phone 手机号
      * @return
      */
-    OrderInfo selectById(@Param("orderId") Integer orderId);
+    OrderInfo selectById(@Param("killId") Integer killId, @Param("phone") String phone);
 
     /**
      * 查询所有订单信息
@@ -31,15 +32,17 @@ public interface OrderInfoDao {
 
     /**
      * 支付成功后修改支付状态为已支付
-     * @param orderId 订单id
+     * @param killId 秒杀id
+     * @param phone 手机号
      * @return
      */
-    int updatePayStatusById(@Param("orderId") Integer orderId);
+    int updatePayStatusById(@Param("killId") Integer killId, @Param("phone") String phone);
 
     /**
      * 取消支付后修改订单状态为0
-     * @param orderId
+     * @param killId 秒杀id
+     * @param phone 手机号
      * @return
      */
-    int updateStatusById(@Param("orderId") Integer orderId);
+    int updateStatusById(@Param("killId") Integer killId, @Param("phone") String phone);
 }

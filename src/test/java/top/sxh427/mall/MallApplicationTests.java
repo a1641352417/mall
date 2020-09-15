@@ -1,7 +1,9 @@
 package top.sxh427.mall;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import org.junit.jupiter.api.Test;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -38,8 +40,8 @@ class MallApplicationTests {
     @Resource
     RedisUtil redisUtil;
 
-
-
+    @Resource
+    private AmqpTemplate amqpTemplate;
 
     void test() {
         List<GoodsInfo> goodsInfos = goodsInfoService.selectByTime("2020-09-10 13:55:00", "2020-09-10 14:15:00");
@@ -97,16 +99,16 @@ class MallApplicationTests {
 
 
     void order() {
-        int k = orderInfoService.insertOne(new OrderInfo(0, 7, "11111111111", "待支付", 1));
-        int o = orderInfoService.insertOne(new OrderInfo(0, 7, "11111111112", "待支付", 1));
+        int k = orderInfoService.insertOne(new OrderInfo(7, "11111111111", "待支付", 1));
+        int o = orderInfoService.insertOne(new OrderInfo(7, "11111111112", "待支付", 1));
         System.out.println("orderInfoService.insertOne:" + k + "," + o);
-        OrderInfo orderInfo = orderInfoService.selectById(1);
+        OrderInfo orderInfo = orderInfoService.selectById(7, "11111111111");
         System.out.println(orderInfo);
-        int q = orderInfoService.updatePayStatusById(1);
+        int q = orderInfoService.updatePayStatusById(7, "11111111111");
         System.out.println("orderInfoService.updatePayStatusById:" + q);
         List<OrderInfo> orderInfos = orderInfoService.selectAll();
         orderInfos.forEach(System.out :: println);
-        int w = orderInfoService.updateStatusById(5);
+        int w = orderInfoService.updateStatusById(7, "11111111111");
         System.out.println("orderInfoService.updateStatusById:" + w);
     }
 
@@ -127,5 +129,26 @@ class MallApplicationTests {
         Gson gson = new Gson();
         String res = gson.toJson(goodsInfo);
         System.out.println(res);
+    }
+
+
+    void test1() {
+        String json = "{\n" +
+                "\t\"goodsName\": \"a\",\n" +
+                "\t\"goodsNums\": 1,\n" +
+                "\t\"price\": 1,\n" +
+                "\t\"image\": \"55\",\n" +
+                "\t\"startTime\": \"2020-9-15 16:00:00\",\n" +
+                "\t\"endTime\": \"2020-9-15 16:00:00\"\n" +
+                "}";
+        Gson gson = new Gson();
+        GoodsInfo goodsInfos = gson.fromJson(json,new TypeToken<GoodsInfo>() {}.getType());
+        System.out.println(goodsInfos.toString());
+    }
+
+
+    void queue() {
+        this.amqpTemplate.convertAndSend("orderQueue1", new OrderInfo(0,"123","已支付",1));
+        this.amqpTemplate.convertAndSend("orderQueue2", new OrderInfo(0,"13","已支付",1));
     }
 }

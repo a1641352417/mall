@@ -3,7 +3,6 @@
 <mapper namespace="top.sxh427.mall.dao.OrderInfoDao">
 
     <resultMap id="OrderInfoMap" type="top.sxh427.mall.entities.OrderInfo">
-        <id column="order_id" property="orderId" jdbcType="INTEGER"/>
         <result column="kill_id" property="killId" jdbcType="INTEGER"/>
         <result column="phone" property="phone" jdbcType="VARCHAR"/>
         <result column="pay_status" property="payStatus" jdbcType="VARCHAR"/>
@@ -18,21 +17,21 @@
 
     <!-- 通过主键查询订单 -->
     <select id="selectById" resultMap="OrderInfoMap">
-        SELECT order_id, kill_id, phone, pay_status FROM order_info WHERE order_id = #{orderId};
+        SELECT kill_id, phone, pay_status FROM order_info WHERE kill_id = #{killId} and phone = #{phone};
     </select>
 
     <!-- 查询所有订单 -->
     <select id="selectAll" resultMap="OrderInfoMap">
-        SELECT order_id, kill_id, phone, pay_status FROM order_info WHERE STATUS = 1;
+        SELECT kill_id, phone, pay_status FROM order_info WHERE STATUS = 1;
     </select>
 
     <!-- 支付成功后修改支付状态为已支付 -->
     <update id="updatePayStatusById" parameterType="java.lang.Integer">
-        UPDATE order_info SET pay_status = '已支付' WHERE order_id = #{orderId};
+        UPDATE order_info SET pay_status = '已支付' WHERE kill_id = #{killId} and phone = #{phone};
     </update>
 
     <!-- 取消支付后修改订单状态为0 -->
     <update id="updateStatusById" parameterType="java.lang.Integer">
-        UPDATE order_info SET status = 0 WHERE order_id = #{orderId};
+        UPDATE order_info SET status = 0 WHERE kill_id = #{killId} and phone = #{phone};
     </update>
 </mapper>

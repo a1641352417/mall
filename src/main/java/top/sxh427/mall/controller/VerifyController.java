@@ -37,6 +37,7 @@ public class VerifyController {
                            @PathVariable("message") String message) {
          String res = "";
          if ((res = (String) redisTemplate.opsForValue().get(killId + phone + message)) != null) {
+
              return res.equals("success") ? new Response(200,  "请求成功！", null) :
                                             new Response(445, "后台服务器瘫痪，请联系客服！", null);
          } else {

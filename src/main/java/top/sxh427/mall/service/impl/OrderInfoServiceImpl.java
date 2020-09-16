@@ -23,15 +23,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
 
     @Override
     public int insertOne(OrderInfo orderInfo) {
-        int res = 0;
-        try {
-            res = orderInfoDao.insertOne(orderInfo);
-            redisUtil.set(orderInfo.getKillId() + orderInfo.getPhone() + "wait", "success", 20, TimeUnit.MINUTES);
-        } catch (Exception e) {
-            redisUtil.set(orderInfo.getKillId() + orderInfo.getPhone() + "wait", "fail", 20, TimeUnit.MINUTES);
-            log.error("数据插入异常");
-        }
-        return res;
+        return orderInfoDao.insertOne(orderInfo);
     }
 
     @Override
@@ -46,27 +38,11 @@ public class OrderInfoServiceImpl implements OrderInfoService {
 
     @Override
     public int updatePayStatusById(Integer killId, String phone) {
-        int res = 0;
-        try {
-            res = orderInfoDao.updatePayStatusById(killId, phone);
-            redisUtil.set(killId + phone + "pay", "success", 20, TimeUnit.MINUTES);
-        } catch (Exception e) {
-            redisUtil.set(killId + phone + "pay", "fail", 20, TimeUnit.MINUTES);
-            log.error("数据更新异常");
-        }
-        return res;
+        return orderInfoDao.updatePayStatusById(killId, phone);
     }
 
     @Override
     public int updateStatusById(Integer killId, String phone) {
-        int res = 0;
-        try {
-            res = orderInfoDao.updateStatusById(killId, phone);
-            redisUtil.set(killId + phone + "pay", "success", 20, TimeUnit.MINUTES);
-        } catch (Exception e) {
-            redisUtil.set(killId + phone + "pay", "fail", 20, TimeUnit.MINUTES);
-            log.error("数据更新异常");
-        }
-        return res;
+        return orderInfoDao.updateStatusById(killId, phone);
     }
 }

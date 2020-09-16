@@ -29,7 +29,6 @@ public class PayController {
             amqpTemplate.convertAndSend("orderQueue2", new OrderInfo(killId, phone, null, null));
             int res = orderInfoService.updatePayStatusById(killId, phone);
             return new Response(200, "请求发送成功，请等待！", null);
-
         } else {
             return  new Response(444, "请不要多次点击！", null);
         }

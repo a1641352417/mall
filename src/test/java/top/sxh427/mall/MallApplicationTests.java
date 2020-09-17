@@ -44,15 +44,8 @@ class MallApplicationTests {
     private AmqpTemplate amqpTemplate;
 
     void test() {
-        List<GoodsInfo> goodsInfos = goodsInfoService.selectByTime("2020-09-10 13:55:00", "2020-09-10 14:15:00");
-        goodsInfos.forEach(System.out::println);
-        if (goodsInfos.size() != 0) {
-            for (int i = 0; i < goodsInfos.size(); i++) {
-                redisUtil.set(goodsInfos.get(i).getKillId().toString(),
-                        goodsInfos.get(i).getGoodsNums().toString(),
-                        20, TimeUnit.MINUTES);
-            }
-        }
+        orderInfoService.updatePayStatusById(11, "11111111112");
+        goodsInfoService.updateGoodsNumsById(11);
     }
 
     void time() throws InterruptedException {

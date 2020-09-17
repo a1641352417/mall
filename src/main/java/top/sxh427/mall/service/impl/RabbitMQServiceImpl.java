@@ -47,8 +47,10 @@ public class RabbitMQServiceImpl implements RabbitMQService {
             goodsInfoService.updateGoodsNumsById(orderInfo.getKillId());
             redisUtil.set(orderInfo.getKillId() + orderInfo.getPhone() + "pay", "success", 20, TimeUnit.MINUTES);
         } catch (Exception e) {
+            e.printStackTrace();
             redisUtil.set(orderInfo.getKillId() + orderInfo.getPhone() + "pay", "fail", 20, TimeUnit.MINUTES);
             log.error("数据更新异常");
+
         }
     }
 
@@ -57,7 +59,7 @@ public class RabbitMQServiceImpl implements RabbitMQService {
     public void process2(OrderInfo orderInfo) {
         try {
             log.info("正在处理的取消请求：" + orderInfo.toString());
-            orderInfoService.updatePayStatusById(orderInfo.getKillId(), orderInfo.getPhone());
+            orderInfoService.updateStatusById(orderInfo.getKillId(), orderInfo.getPhone());
             redisUtil.set(orderInfo.getKillId() + orderInfo.getPhone() + "pay", "success", 20, TimeUnit.MINUTES);
         } catch (Exception e) {
             redisUtil.set(orderInfo.getKillId() + orderInfo.getPhone() + "pay", "fail", 20, TimeUnit.MINUTES);

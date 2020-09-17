@@ -17,7 +17,7 @@ public class VerifyController {
     private VerifyService verifyService;
 
     @Autowired
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<String, String> redisTemplate;
 
     @PostMapping("/login/{phone}/{type}")
     public Response login(@PathVariable("phone") String phone, @PathVariable("type") Integer type) {

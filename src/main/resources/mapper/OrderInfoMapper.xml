@@ -26,12 +26,12 @@
     </select>
 
     <!-- 支付成功后修改支付状态为已支付 -->
-    <update id="updatePayStatusById" parameterType="java.lang.Integer">
+    <update id="updatePayStatusById">
         UPDATE order_info SET pay_status = '已支付' WHERE kill_id = #{killId} and phone = #{phone};
     </update>
 
     <!-- 取消支付后修改订单状态为0 -->
-    <update id="updateStatusById" parameterType="java.lang.Integer">
+    <update id="updateStatusById">
         UPDATE order_info SET status = 0 WHERE kill_id = #{killId} and phone = #{phone};
     </update>
 </mapper>

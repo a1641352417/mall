@@ -18,9 +18,6 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     @Resource
     private OrderInfoDao orderInfoDao;
 
-    @Resource
-    private RedisUtil redisUtil;
-
     @Override
     public int insertOne(OrderInfo orderInfo) {
         return orderInfoDao.insertOne(orderInfo);

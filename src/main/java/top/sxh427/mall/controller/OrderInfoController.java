@@ -1,5 +1,6 @@
 package top.sxh427.mall.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -13,6 +14,7 @@ import javax.annotation.Resource;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 @CrossOrigin
 @RestController
 @RequestMapping("kill")
@@ -22,7 +24,7 @@ public class OrderInfoController {
     private OrderInfoService orderInfoService;
 
     @Autowired
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<String, String> redisTemplate;
 
     @Resource
     private RedisUtil redisUtil;
@@ -32,11 +34,15 @@ public class OrderInfoController {
 
     @GetMapping("/get/record")
     public List<OrderInfo> getAllOrderInfo(){
-        return orderInfoService.selectAll();
+        List<OrderInfo> orderInfos = orderInfoService.selectAll();
+        if (orderInfos.size() > 0) {
+            orderInfos.get(0).setStatus(8585);
+        }
+        return orderInfos;
     }
 
-    @GetMapping("/buy/{phone}/{killId}")
-    public Response buy(@PathVariable("phone") String phone, @PathVariable("killId") Integer killId) {
+    @GetMapping("/buy/{killId}/{phone}")
+    public Response buy(@PathVariable("killId") Integer killId, @PathVariable( "phone") String phone) {
         if(redisTemplate.opsForValue().get("run") != null //活动开始
         && redisTemplate.opsForValue().get(killId.toString()) != null) { //商品在redis中,防止别人直接使用该链接访问
             if(redisTemplate.opsForValue().decrement(killId.toString()) >= 0) {
